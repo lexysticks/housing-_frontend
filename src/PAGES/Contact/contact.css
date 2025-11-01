@@ -1,0 +1,215 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  line-height: 1.6;
+}
+
+/* Scroll animation */
+.opacity-0 {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.8s ease-in-out;
+}
+.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hero Section */
+.why_choose_us {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 40px 0 120px;
+  padding: 40px;
+  flex-wrap: wrap;
+}
+
+.why_choose_us .choose_pro h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.why_choose_us .choose_pro p {
+  color: #555;
+  margin-bottom: 20px;
+}
+
+/* Contact Cards */
+.team {
+  padding: 60px 20px;
+  background: #f9f9f9;
+  text-align: center;
+  margin: 40px 0;
+}
+
+.team .meet_team h1 {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  color: #222;
+}
+
+.team .meet_team p {
+  max-width: 700px;
+  margin: 0 auto 40px;
+  color: #555;
+  line-height: 1.6;
+}
+
+.contact-cards {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.contact-cards .card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  flex: 1;
+  min-width: 220px;
+  max-width: 300px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact-cards .card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+.contact-cards .card i {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #218838;
+  display: block;
+}
+
+.contact-cards .card h5 {
+  font-size: 1rem;
+  color: #333;
+  margin: 0;
+}
+
+/* Map + Form */
+.mapp {
+  display: flex;
+  justify-content: space-between;
+  gap: 50px;
+  padding: 40px 20px;
+  align-items: flex-start;
+  margin: 80px 0;
+  background: #f9f9f9;
+  flex-wrap: wrap;
+}
+
+.mapp .map {
+  flex: 1;
+  min-width: 300px;
+  max-width: 600px;
+}
+
+.mapp .contact_info {
+  flex: 1;
+  min-width: 300px;
+  max-width: 600px;
+}
+
+.mapp .contact_info p {
+  margin-bottom: 20px;
+  color: #555;
+}
+
+.contact_input input,
+.contact_input textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 15px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.contact_input textarea {
+  resize: vertical;
+}
+
+.ctn {
+  display: inline-block;
+  padding: 15px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s ease;
+}
+
+.ctn:hover {
+  background-color: #218838;
+}
+
+.send_mesg {
+  color: #fff;
+  text-decoration: none;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .why_choose_us {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .why_choose_us .choose {
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .mapp {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .mapp .map,
+  .mapp .contact_info {
+    width: 90%;
+  }
+
+  .contact_input input,
+  .contact_input textarea {
+    width: 100%;
+  }
+
+  .ctn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .team .meet_team p {
+    max-width: 100%;
+  }
+
+  .why_choose_us {
+    padding: 20px;
+  }
+}

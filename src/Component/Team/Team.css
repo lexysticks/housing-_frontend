@@ -1,0 +1,95 @@
+.team {
+  padding: 60px 5%;
+  background-color: #f8f9fb;
+  text-align: center;
+}
+
+.meet_team h1 {
+  font-size: 2.2rem;
+  color: #222;
+  margin-bottom: 10px;
+}
+
+.meet_team p {
+  max-width: 700px;
+  margin: 0 auto 40px;
+  color: #555;
+  line-height: 1.6;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 22%; /* 4 in a row (with gaps) */
+  min-width: 250px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.card img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+
+.card h2 {
+  font-size: 1.2rem;
+  margin: 15px 0 5px;
+  color: #333;
+}
+
+.card p {
+  color: #777;
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+}
+
+.social {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  padding-bottom: 15px;
+}
+
+.social i {
+  color: #218838;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.social i:hover {
+  color: #218838;
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 1024px) {
+  .card {
+    width: 30%; /* 3 in a row on tablets */
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    width: 45%; /* 2 in a row on smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    width: 100%; /* 1 in a row on phones */
+  }
+}

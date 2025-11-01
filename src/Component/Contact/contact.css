@@ -1,0 +1,58 @@
+.contact_us {
+  margin-top: 110px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.contact { padding: 30px; }
+
+.btn_contact {
+  background-color: #218838;
+  color: white;
+  width: 200px;
+  padding: 30px;
+  border: none;
+  border-radius: 15px;
+}
+
+.btn_contact a {
+  text-decoration: none;
+  color: white;
+}
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 900px) {
+  .contact_us {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .about_img img {
+    max-width: 90%;
+  }
+
+  .contact {
+    max-width: 100%;
+    padding: 20px;
+  }
+
+  .btn_contact {
+    margin: 0 auto;
+    width: 70%;
+  }
+}
+
+@media (max-width: 500px) {
+  .contact h2 {
+    font-size: 1.6rem;
+  }
+
+  .contact p {
+    font-size: 1rem;
+  }
+
+  .btn_contact {
+    width: 90%;
+    padding: 12px;
+  }
+}

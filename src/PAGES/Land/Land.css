@@ -1,0 +1,260 @@
+/* ===== GENERAL RENT SECTION ===== */
+.rent {
+  padding: 80px 8%;
+  background: #f8fafc;
+  color: #1f2937;
+  font-family: "Poppins", sans-serif;
+}
+
+/* ===== HEADING SECTION ===== */
+.rent_one {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.rent_one h2 {
+  font-size: 2.2rem;
+  color: #0f172a;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.rent_one p {
+  font-size: 1rem;
+  color: #475569;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* ===== FILTER NAV ===== */
+.property {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.property-list {
+  display: inline-flex;
+  list-style: none;
+  padding: 0;
+  background: #fff;
+  border-radius: 50px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.property-list li {
+  margin: 0;
+}
+
+.property-list li a {
+  display: block;
+  padding: 12px 25px;
+  color: #0f172a;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.property-list li a.active,
+.property-list li a:hover {
+  background: #218838;
+  color: #fff;
+}
+
+/* ===== PROPERTY GRID ===== */
+.property-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 columns */
+  gap: 35px;
+  justify-content: center;
+}
+
+/* ===== PROPERTY CARD ===== */
+.property-card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.property-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(15, 23, 42, 0.12);
+}
+
+/* ===== IMAGE CONTAINER ===== */
+.image-container {
+  position: relative;
+  width: 100%;
+  height: 230px;
+  overflow: hidden;
+}
+
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.image-container:hover img {
+  transform: scale(1.05);
+}
+
+/* ===== CATEGORY BADGE ===== */
+.badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: #218838;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ===== PROPERTY DETAILS ===== */
+.property-details {
+  padding: 20px;
+}
+
+.property-details .price {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #218838;
+  margin-bottom: 8px;
+}
+
+.property-details .title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 5px;
+}
+
+.property-details h5 {
+  font-size: 0.95rem;
+  color: #475569;
+  margin-bottom: 15px;
+}
+
+.feature {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  gap: 10px;
+}
+
+.feature li {
+  background: #f1f5f9;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+   color: #218838;
+}
+
+/* ===== PAGINATION ===== */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.pagination-list {
+  display: flex;
+  gap: 10px;
+  list-style: none;
+  background: #fff;
+  padding: 10px 25px;
+  border-radius: 50px;
+  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.08);
+  align-items: center;
+}
+
+.pagination-list li {
+  padding: 8px 14px;
+  cursor: pointer;
+   color: #218838;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+}
+
+.pagination-list li:hover {
+  background: #218838;
+  color: #fff;
+}
+
+.pagination-list li.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.pagination-list .current-page {
+  color: #475569;
+  font-weight: 500;
+  cursor: default;
+}
+
+/* ===== SCROLL ANIMATION ===== */
+.opacity-0 {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.9s ease-out, transform 0.9s ease-out;
+}
+
+.show {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 1024px) {
+  .rent {
+    padding: 60px 6%;
+  }
+
+  .rent_one h2 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .rent {
+    padding: 50px 5%;
+  }
+
+  .property-list {
+    flex-wrap: wrap;
+    border-radius: 20px;
+  }
+
+  .property-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+
+  .pagination-list {
+    flex-wrap: wrap;
+    padding: 10px 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .rent_one h2 {
+    font-size: 1.6rem;
+  }
+
+  .property-details .price {
+    font-size: 1.05rem;
+  }
+
+  .property-details .title {
+    font-size: 0.95rem;
+  }
+}

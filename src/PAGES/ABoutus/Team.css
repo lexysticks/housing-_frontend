@@ -1,0 +1,18 @@
+.team {
+  padding: 60px 20px;
+  background: #f9f9f9;
+  text-align: center;
+}
+
+.team .meet_team h1 {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  color: #222;
+}
+
+.team .meet_team p {
+  max-width: 700px;
+  margin: 0 auto 40px;
+  color: #555;
+  line-height: 1.6;
+}
