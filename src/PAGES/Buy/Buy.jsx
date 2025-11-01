@@ -183,7 +183,7 @@
 //     </div>
 //   );
 // }
-import "./buy.css";
+import "./Buy.css";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { endpoints } from "../../config";
