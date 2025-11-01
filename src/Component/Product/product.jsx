@@ -1,4 +1,4 @@
-import "./Product.css";
+import "./product.css";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { endpoints } from "../../config"; // ✅ Import the centralized API config
