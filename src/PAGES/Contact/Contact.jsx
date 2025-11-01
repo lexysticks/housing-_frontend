@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import "./contactpage.css";
+import "./Contact.css";
 import hero2 from "../../assets/contact-last.jpg";
 
 // Hook for scroll fade animation
