@@ -65,9 +65,14 @@
 /* ===== PROPERTY GRID ===== */
 .property-grid {
   display: grid;
- grid-template-columns: repeat(3, 1fr); /* 3 columns */
+  grid-template-columns: repeat(3, 1fr);
   gap: 35px;
-  justify-content: center;
+  justify-content: center; /* Centers grid horizontally */
+  justify-items: center;   /* Centers each card in its grid cell */
+  align-items: start;
+  margin: 0 auto;
+  max-width: 1300px; /* Keeps the layout centered within a limit */
+  text-align: center;
 }
 
 /* ===== PROPERTY CARD ===== */
@@ -77,6 +82,9 @@
   overflow: hidden;
   box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
 }
 
 .property-card:hover {
@@ -90,17 +98,47 @@
   width: 100%;
   height: 230px;
   overflow: hidden;
+  border-radius: 12px;
 }
 
 .image-container img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  position: relative;
+  z-index: 2;
 }
 
-.image-container:hover img {
-  transform: scale(1.05);
+.image-container img.loaded {
+  opacity: 1;
+}
+
+.image-placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(120deg, #e0e0e0 25%, #f5f5f5 50%, #e0e0e0 75%);
+  background-size: 400% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 12px;
+  z-index: 1;
+}
+
+.image-container img.loaded + .image-placeholder {
+  display: none;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
 }
 
 /* ===== CATEGORY BADGE ===== */
@@ -149,6 +187,7 @@
   list-style: none;
   padding: 0;
   gap: 10px;
+  justify-content: center;
 }
 
 .feature li {
@@ -156,7 +195,7 @@
   padding: 6px 12px;
   border-radius: 8px;
   font-size: 0.85rem;
-   color: #218838;
+  color: #218838;
 }
 
 /* ===== PAGINATION ===== */
@@ -180,7 +219,7 @@
 .pagination-list li {
   padding: 8px 14px;
   cursor: pointer;
-   color: #218838;
+  color: #218838;
   font-weight: 600;
   transition: all 0.3s ease;
   border-radius: 6px;
@@ -214,6 +253,26 @@
   transform: translateY(0) !important;
 }
 
+/* ===== CLICK BUTTON SECTION ===== */
+.click_to {
+  text-align: center;
+  margin: 40px 0;
+}
+
+.btn_book {
+  margin: 10px;
+  padding: 12px 20px;
+  background: #218838;
+  border: none;
+  border-radius: 5px;
+}
+
+.btn_book a {
+  text-decoration: none;
+  color: #fff;
+  font-weight: bold;
+}
+
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 1024px) {
   .rent {
@@ -222,6 +281,13 @@
 
   .rent_one h2 {
     font-size: 2rem;
+  }
+
+  .property-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    justify-content: center;
+    justify-items: center;
   }
 }
 
@@ -237,6 +303,11 @@
 
   .property-grid {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    justify-content: center;
+    justify-items: center;
+    margin: 0 auto;
+    text-align: center;
   }
 
   .pagination-list {
@@ -257,54 +328,10 @@
   .property-details .title {
     font-size: 0.95rem;
   }
-}
 
-
-/* === CLICK TO BUTTONS === */
-.click_to {
-  text-align: center;
-  margin: 40px 0;
-}
-
-.btn_book {
-  margin: 10px;
-  padding: 12px 20px;
-  background: #218838;
-  border: none;
-  border-radius: 5px;
-}
-
-.btn_book a {
-  text-decoration: none;
-  color: #fff;
-  font-weight: bold;
-}
-
-/* Responsive Design */
-@media (max-width: 1024px) {
-  .property-grid {
-    display: grid; 
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    justify-content: center; 
-    margin-left: 70px;
-    gap: 20px; 
-    text-align: center;
-    align-items: center;
-    padding: 20px 0;
-    
-  }
-}
-
-@media (max-width: 768px) {
-  .property-grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-
-  }
-}
-
-@media (max-width: 480px) {
   .property-grid {
     grid-template-columns: 1fr;
+    justify-content: center;
+    justify-items: center;
   }
 }
-

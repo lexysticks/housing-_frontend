@@ -32,13 +32,13 @@
   list-style: none;
 }
 
-
 /* Paragraph */
 .header1 p {
   font-size: 1.1rem;
   line-height: 1.7;
   margin-top: 10px;
   color: #333;
+  max-width: 550px;
 }
 
 /* ========== BUTTONS ========== */
@@ -60,11 +60,12 @@
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .btn_book:hover {
-  background-color: #218838;
+  background-color: #1e7b32;
+  transform: scale(1.03);
 }
 
 .btn_book a {
@@ -137,15 +138,45 @@
 
 /* ===== RESPONSIVENESS ===== */
 
-/* Tablets (<= 1024px) */
+/* 🖥️ Large Desktops (>=1600px) */
+@media (min-width: 1600px) {
+  .header {
+    padding: 60px 10%;
+  }
+  .header1 p {
+    font-size: 1.3rem;
+  }
+  .btn_book {
+    width: 300px;
+    font-size: 1.1rem;
+  }
+  .slider img {
+    height: 550px;
+  }
+}
+
+/* 💻 Laptops (<=1366px) */
+@media (max-width: 1366px) {
+  .header {
+    padding: 35px 4%;
+  }
+  .header1 p {
+    font-size: 1.05rem;
+  }
+  .slider img {
+    height: 350px;
+  }
+}
+
+/* 📱 Tablets (<=1024px) */
 @media (max-width: 1024px) {
   .header {
     flex-direction: column;
     text-align: center;
+    padding: 40px 6%;
   }
 
   .lrb ul {
-    
     justify-content: center;
     gap: 15px;
   }
@@ -164,11 +195,11 @@
   }
 }
 
-/* Mobile (<= 768px) */
+/* 📱 Mobile (<=768px) */
 @media (max-width: 768px) {
   .header {
-    padding: 20px;
-    gap: 20px;
+    padding: 25px;
+    gap: 25px;
   }
 
   .lrb ul {
@@ -178,6 +209,7 @@
 
   .header1 p {
     font-size: 0.95rem;
+    line-height: 1.6;
   }
 
   .btn_book {
@@ -195,7 +227,7 @@
   }
 }
 
-/* Small Mobile (<= 480px) */
+/* 📲 Small Mobile (<=480px) */
 @media (max-width: 480px) {
   .header {
     padding: 15px;
@@ -212,5 +244,31 @@
 
   .slider img {
     height: 200px;
+  }
+
+  .nav {
+    font-size: 1.3rem;
+    padding: 6px;
+  }
+}
+
+/* 📞 Very Small Devices (<=360px) */
+@media (max-width: 360px) {
+  .header {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .header1 p {
+    font-size: 0.85rem;
+  }
+
+  .btn_book {
+    font-size: 0.85rem;
+    padding: 12px;
+  }
+
+  .slider img {
+    height: 180px;
   }
 }

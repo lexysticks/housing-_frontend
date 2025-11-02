@@ -13,11 +13,12 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       {/* Logo */}
-      <div className="logo">
-        <NavLink to="/" onClick={closeMenu}>
-          <img src={logo} alt="Logo" width="120" />
+      {/* <div className="logo">
+        
+      </div> */}
+      <NavLink to="/" onClick={closeMenu}>
+          <img src={logo} alt="Logo" width="80" />
         </NavLink>
-      </div>
 
       {/* Hamburger Icon */}
       <div className="hamburger" onClick={toggleMenu}>

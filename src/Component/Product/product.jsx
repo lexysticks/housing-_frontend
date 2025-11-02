@@ -120,14 +120,23 @@ export default function Property() {
               key={land.id || index}
               ref={(el) => (cardRefs.current[index] = el)}
             >
+              {/* ✅ Lazy loading with shimmer placeholder */}
               <div className="image-container">
                 <img
                   src={getImageUrl(land)}
                   alt={land.title}
-                  onError={(e) => (e.target.src = "/fallback.jpg")}
+                  loading="lazy"
+                  onLoad={(e) => e.target.classList.add("loaded")}
+                  onError={(e) => {
+                    e.target.src = "/fallback.jpg";
+                    e.target.classList.add("loaded");
+                  }}
                 />
+                <div className="image-placeholder"></div>
                 <span className="badge">{land.category_type}</span>
               </div>
+
+              {/* ===== Property Details ===== */}
               <div className="property-details">
                 <p className="price">₦ {Number(land.price).toLocaleString()}</p>
                 <p className="title">{land.title}</p>
@@ -144,42 +153,6 @@ export default function Property() {
           <p>No house listings available.</p>
         )}
       </div>
-
-      {/* ===== Pagination (optional) ===== */}
-      {/* You can uncomment this if your API supports pagination */}
-      {/* 
-      <div className="pagination">
-        <ul className="pagination-list">
-          <li
-            className={currentPage === 1 ? "disabled" : ""}
-            onClick={() => handlePageChange(1)}
-          >
-            « First
-          </li>
-          <li
-            className={currentPage === 1 ? "disabled" : ""}
-            onClick={() => handlePageChange(currentPage - 1)}
-          >
-            ‹ Previous
-          </li>
-          <li className="current-page">
-            Page {currentPage} of {totalPages}
-          </li>
-          <li
-            className={currentPage === totalPages ? "disabled" : ""}
-            onClick={() => handlePageChange(currentPage + 1)}
-          >
-            Next ›
-          </li>
-          <li
-            className={currentPage === totalPages ? "disabled" : ""}
-            onClick={() => handlePageChange(totalPages)}
-          >
-            Last »
-          </li>
-        </ul>
-      </div>
-      */}
 
       {/* ===== Click To See More Buttons ===== */}
       <div className="click_to">
