@@ -1,23 +1,39 @@
 // import "./Land.css";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { endpoints } from "../../config"; // ✅ Import config file
+import { endpoints } from "../../config";
 
-// ✅ Custom hook for scroll fade animation
+/* =======================
+   Skeleton Loader
+======================= */
+const SkeletonCards = () =>
+  Array.from({ length: 6 }).map((_, i) => (
+    <div className="property-card skeleton-card" key={i}>
+      <div className="image-container skeleton"></div>
+      <div className="property-details">
+        <div className="skeleton skeleton-text short"></div>
+        <div className="skeleton skeleton-text"></div>
+        <div className="skeleton skeleton-text small"></div>
+      </div>
+    </div>
+  ));
+
+/* =======================
+   Scroll Fade Hook
+======================= */
 function useScrollFade(ref) {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           entry.target.classList.add("show");
-          observer.unobserve(entry.target); // Animate only once
+          observer.unobserve(entry.target);
         }
       },
       { threshold: 0.1 }
     );
 
     if (ref.current) observer.observe(ref.current);
-
     return () => {
       if (ref.current) observer.unobserve(ref.current);
     };
@@ -26,17 +42,21 @@ function useScrollFade(ref) {
 
 export default function Land() {
   const [lands, setLands] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
   const headingRef = useRef(null);
   const cardRefs = useRef([]);
 
-  // ✅ Fade-in animation for heading
+  /* Fade heading */
   useScrollFade(headingRef);
 
-  // ✅ Fade-in animation for cards
+  /* Fade cards ONLY after data loads */
   useEffect(() => {
+    if (loading || lands.length === 0 || error) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -50,20 +70,23 @@ export default function Land() {
     );
 
     cardRefs.current.forEach((card) => card && observer.observe(card));
-
     return () => {
       cardRefs.current.forEach((card) => card && observer.unobserve(card));
     };
-  }, [lands]);
+  }, [lands, loading, error]);
 
-  // ✅ Fetch lands from API
+  /* =======================
+     Fetch Data
+  ======================= */
   useEffect(() => {
+    setLoading(true);
+    setError(false);
+
     axios
       .get(`${endpoints.lands}?page=${currentPage}`)
       .then((res) => {
         const data = res.data;
 
-        // Handle paginated and non-paginated data
         if (Array.isArray(data)) {
           setLands(data);
           setTotalPages(1);
@@ -71,14 +94,20 @@ export default function Land() {
           setLands(data.results);
           setTotalPages(Math.ceil(data.count / data.results.length));
         } else {
-          console.error("Unexpected API response:", data);
           setLands([]);
         }
       })
-      .catch((err) => console.error("Error fetching lands:", err));
+      .catch((err) => {
+        console.error("❌ Error fetching lands:", err);
+        setError(true);
+        setLands([]);
+      })
+      .finally(() => setLoading(false));
   }, [currentPage]);
 
-  // ✅ Build Cloudinary image URL
+  /* =======================
+     Image Helper
+  ======================= */
   const getImageUrl = (land) => {
     if (land.image_url) return land.image_url;
     if (land.images && land.images.startsWith("http")) return land.images;
@@ -87,25 +116,25 @@ export default function Land() {
     return "/fallback.jpg";
   };
 
-  // ✅ Pagination handler
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
   };
 
-  // ✅ JSX Return
+  /* =======================
+     JSX
+  ======================= */
   return (
     <div className="rent">
-      {/* ---------- Heading ---------- */}
+      {/* ===== Heading ===== */}
       <div className="rent_one opacity-0" ref={headingRef}>
-        <h2>Properties For Land</h2>
+        <h2>Land For Sale</h2>
         <p>
-          Find Your Perfect Haven! These exclusive land properties offer prime
-          locations, ideal for building your dream home or investing in the
-          future. Secure your piece of land today.
+          Secure premium land in prime locations. Perfect for building,
+          investing, and future development.
         </p>
       </div>
 
-      {/* ---------- Filter Section ---------- */}
+      {/* ===== Filter ===== */}
       <div className="property">
         <ul className="property-list">
           <li>
@@ -116,16 +145,17 @@ export default function Land() {
         </ul>
       </div>
 
-      {/* ---------- Property Cards ---------- */}
+      {/* ===== Property Grid ===== */}
       <div className="property-grid">
-        {Array.isArray(lands) && lands.length > 0 ? (
+        {loading || lands.length === 0 || error ? (
+          <SkeletonCards />
+        ) : (
           lands.map((land, index) => (
             <div
               className="property-card opacity-0"
               key={land.id || index}
               ref={(el) => (cardRefs.current[index] = el)}
             >
-              {/* ✅ Lazy Loading + Placeholder */}
               <div className="image-container">
                 <img
                   src={getImageUrl(land)}
@@ -142,7 +172,9 @@ export default function Land() {
               </div>
 
               <div className="property-details">
-                <p className="price">₦ {Number(land.price).toLocaleString()}</p>
+                <p className="price">
+                  ₦ {Number(land.price).toLocaleString()}
+                </p>
                 <p className="title">{land.title}</p>
                 <h5>📍 {land.location}</h5>
                 <ul className="feature">
@@ -151,12 +183,10 @@ export default function Land() {
               </div>
             </div>
           ))
-        ) : (
-          <p>No land listings available.</p>
         )}
       </div>
 
-      {/* ---------- Pagination ---------- */}
+      {/* ===== Pagination ===== */}
       <div className="pagination">
         <ul className="pagination-list">
           <li
@@ -193,7 +223,6 @@ export default function Land() {
     </div>
   );
 }
-
 
 
 

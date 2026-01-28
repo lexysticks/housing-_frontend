@@ -3,7 +3,24 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { endpoints } from "../../config";
 
-// ✅ Custom hook for scroll fade animation
+/* =======================
+   Skeleton Loader
+======================= */
+const SkeletonCards = () =>
+  Array.from({ length: 6 }).map((_, i) => (
+    <div className="property-card skeleton-card" key={i}>
+      <div className="image-container skeleton"></div>
+      <div className="property-details">
+        <div className="skeleton skeleton-text short"></div>
+        <div className="skeleton skeleton-text"></div>
+        <div className="skeleton skeleton-text small"></div>
+      </div>
+    </div>
+  ));
+
+/* =======================
+   Scroll Fade Hook
+======================= */
 function useScrollFade(ref) {
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -25,25 +42,30 @@ function useScrollFade(ref) {
 
 export default function Buy() {
   const [lands, setLands] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
   const headingRef = useRef(null);
   const cardRefs = useRef([]);
 
-  // ✅ Apply scroll fade to heading
+  /* Fade heading */
   useScrollFade(headingRef);
 
-  // ✅ Scroll fade for each property card
+  /* Fade cards ONLY when data exists */
   useEffect(() => {
+    if (loading || lands.length === 0 || error) return;
+
     const observer = new IntersectionObserver(
-      (entries) =>
+      (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("show");
             observer.unobserve(entry.target);
           }
-        }),
+        });
+      },
       { threshold: 0.1 }
     );
 
@@ -51,14 +73,20 @@ export default function Buy() {
     return () => {
       cardRefs.current.forEach((card) => card && observer.unobserve(card));
     };
-  }, [lands]);
+  }, [lands, loading, error]);
 
-  // ✅ Fetch data from Django API
+  /* =======================
+     Fetch Data
+  ======================= */
   useEffect(() => {
+    setLoading(true);
+    setError(false);
+
     axios
       .get(`${endpoints.buy}?page=${currentPage}`)
       .then((res) => {
         const data = res.data;
+
         if (Array.isArray(data)) {
           setLands(data);
           setTotalPages(1);
@@ -66,38 +94,47 @@ export default function Buy() {
           setLands(data.results);
           setTotalPages(Math.ceil(data.count / data.results.length));
         } else {
-          console.error("Unexpected API response:", data);
           setLands([]);
         }
       })
-      .catch((err) => console.error("❌ Error fetching data:", err));
+      .catch((err) => {
+        console.error("❌ Error fetching buy properties:", err);
+        setError(true);
+        setLands([]);
+      })
+      .finally(() => setLoading(false));
   }, [currentPage]);
 
-  // ✅ Handle image URL logic
+  /* =======================
+     Image Helper
+  ======================= */
   const getImageUrl = (land) => {
     if (land.image_url) return land.image_url;
     if (land.images && land.images.startsWith("http")) return land.images;
-    if (land.images) return `https://res.cloudinary.com/djil65xwt/${land.images}`;
+    if (land.images)
+      return `https://res.cloudinary.com/djil65xwt/${land.images}`;
     return "/fallback.jpg";
   };
 
-  // ✅ Handle pagination
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
   };
 
+  /* =======================
+     JSX
+  ======================= */
   return (
     <div className="rent">
       {/* ===== Heading ===== */}
       <div className="rent_one opacity-0" ref={headingRef}>
         <h2>Properties For Sale</h2>
         <p>
-          Find Your Perfect Haven! These exclusive properties offer prime
-          locations and modern architecture — perfect for your next investment.
+          Find your perfect haven. These exclusive properties offer prime
+          locations and modern architecture — ideal for smart investments.
         </p>
       </div>
 
-      {/* ===== Filter Section ===== */}
+      {/* ===== Filter ===== */}
       <div className="property">
         <ul className="property-list">
           <li>
@@ -110,14 +147,15 @@ export default function Buy() {
 
       {/* ===== Property Grid ===== */}
       <div className="property-grid">
-        {Array.isArray(lands) && lands.length > 0 ? (
+        {loading || lands.length === 0 || error ? (
+          <SkeletonCards />
+        ) : (
           lands.map((land, index) => (
             <div
               className="property-card opacity-0"
               key={land.id || index}
               ref={(el) => (cardRefs.current[index] = el)}
             >
-              {/* ✅ Image with shimmer placeholder */}
               <div className="image-container">
                 <img
                   src={getImageUrl(land)}
@@ -133,9 +171,10 @@ export default function Buy() {
                 <span className="badge">{land.category_type}</span>
               </div>
 
-              {/* ===== Property Details ===== */}
               <div className="property-details">
-                <p className="price">₦ {Number(land.price).toLocaleString()}</p>
+                <p className="price">
+                  ₦ {Number(land.price).toLocaleString()}
+                </p>
                 <p className="title">{land.title}</p>
                 <h5>📍 {land.location}</h5>
                 <ul className="feature">
@@ -146,8 +185,6 @@ export default function Buy() {
               </div>
             </div>
           ))
-        ) : (
-          <p>No house listings available.</p>
         )}
       </div>
 

@@ -1,17 +1,33 @@
-
 // import "./Shortlet.css";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { endpoints } from "../../config";
 
-// Custom hook for scroll fade animation
+/* =======================
+   Skeleton Loader
+======================= */
+const SkeletonCards = () =>
+  Array.from({ length: 6 }).map((_, i) => (
+    <div className="property-card skeleton-card" key={i}>
+      <div className="image-container skeleton"></div>
+      <div className="property-details">
+        <div className="skeleton skeleton-text short"></div>
+        <div className="skeleton skeleton-text"></div>
+        <div className="skeleton skeleton-text small"></div>
+      </div>
+    </div>
+  ));
+
+/* =======================
+   Scroll Fade Hook
+======================= */
 function useScrollFade(ref) {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           entry.target.classList.add("show");
-          observer.unobserve(entry.target); // animate once
+          observer.unobserve(entry.target);
         }
       },
       { threshold: 0.1 }
@@ -26,16 +42,21 @@ function useScrollFade(ref) {
 
 export default function Shortlet() {
   const [shortlets, setShortlets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
   const headingRef = useRef(null);
   const cardRefs = useRef([]);
 
-  // Scroll fade animation for heading
+  /* Fade heading */
   useScrollFade(headingRef);
 
+  /* Fade cards ONLY after data loads */
   useEffect(() => {
+    if (loading || shortlets.length === 0 || error) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -52,10 +73,15 @@ export default function Shortlet() {
     return () => {
       cardRefs.current.forEach((card) => card && observer.unobserve(card));
     };
-  }, [shortlets]);
+  }, [shortlets, loading, error]);
 
-  // ✅ Fetch shortlet data
+  /* =======================
+     Fetch Data
+  ======================= */
   useEffect(() => {
+    setLoading(true);
+    setError(false);
+
     axios
       .get(`${endpoints.shortlet}?page=${currentPage}`)
       .then((res) => {
@@ -68,14 +94,20 @@ export default function Shortlet() {
           setShortlets(data.results);
           setTotalPages(Math.ceil(data.count / data.results.length));
         } else {
-          console.error("Unexpected API response:", data);
           setShortlets([]);
         }
       })
-      .catch((err) => console.error("Error fetching shortlet:", err));
+      .catch((err) => {
+        console.error("❌ Error fetching shortlet:", err);
+        setError(true);
+        setShortlets([]);
+      })
+      .finally(() => setLoading(false));
   }, [currentPage]);
 
-  // ✅ Cloudinary image builder
+  /* =======================
+     Image Helper
+  ======================= */
   const getImageUrl = (item) => {
     if (item.image_url) return item.image_url;
     if (item.images && item.images.startsWith("http")) return item.images;
@@ -88,19 +120,21 @@ export default function Shortlet() {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
   };
 
+  /* =======================
+     JSX
+  ======================= */
   return (
     <div className="rent">
-      {/* Heading */}
+      {/* ===== Heading ===== */}
       <div className="rent_one opacity-0" ref={headingRef}>
-        <h2>Properties For Shortlet!!!</h2>
+        <h2>Properties For Shortlet</h2>
         <p>
           Discover beautifully furnished shortlet apartments for your stay.
-          Whether for business or leisure, find your perfect home away from
-          home.
+          Whether business or leisure, find comfort away from home.
         </p>
       </div>
 
-      {/* Filter */}
+      {/* ===== Filter ===== */}
       <div className="property">
         <ul className="property-list">
           <li>
@@ -111,9 +145,11 @@ export default function Shortlet() {
         </ul>
       </div>
 
-      {/* Property Cards */}
+      {/* ===== Property Grid ===== */}
       <div className="property-grid">
-        {Array.isArray(shortlets) && shortlets.length > 0 ? (
+        {loading || shortlets.length === 0 || error ? (
+          <SkeletonCards />
+        ) : (
           shortlets.map((item, index) => (
             <div
               className="property-card opacity-0"
@@ -121,23 +157,24 @@ export default function Shortlet() {
               ref={(el) => (cardRefs.current[index] = el)}
             >
               <div className="image-container">
-                {/* Shimmer placeholder */}
-                <div className="image-placeholder"></div>
-
-                {/* Lazy loaded image */}
                 <img
                   src={getImageUrl(item)}
                   alt={item.title}
                   loading="lazy"
                   onLoad={(e) => e.target.classList.add("loaded")}
-                  onError={(e) => (e.target.src = "/fallback.jpg")}
+                  onError={(e) => {
+                    e.target.src = "/fallback.jpg";
+                    e.target.classList.add("loaded");
+                  }}
                 />
-
+                <div className="image-placeholder"></div>
                 <span className="badge">{item.category_type}</span>
               </div>
 
               <div className="property-details">
-                <p className="price">₦ {Number(item.price).toLocaleString()}</p>
+                <p className="price">
+                  ₦ {Number(item.price).toLocaleString()}
+                </p>
                 <p className="title">{item.title}</p>
                 <h5>📍 {item.location}</h5>
                 <ul className="feature">
@@ -146,12 +183,10 @@ export default function Shortlet() {
               </div>
             </div>
           ))
-        ) : (
-          <p>No shortlet listings available.</p>
         )}
       </div>
 
-      {/* Pagination */}
+      {/* ===== Pagination ===== */}
       <div className="pagination">
         <ul className="pagination-list">
           <li
